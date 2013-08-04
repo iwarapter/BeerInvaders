@@ -71,10 +71,10 @@ public:
 		return *this;
 	}
 
-	const Vector2D& operator*=(const Vector2D& rhs)
+	const Vector2D& operator*=(const double& rhs)
 	{
-		x *= rhs.x;
-		y -= rhs.y;
+		x *= rhs;
+		y *= rhs;
 
 		return *this;
 	}
@@ -116,6 +116,17 @@ inline double Vector2D::LengthSq()const
 	return (x * x + y * y);
 }
 
+inline void Vector2D::Normalize()
+{
+	double vector_length = this->Length();
+
+	if( vector_length > std::numeric_limits<double>::epsilon())
+	{
+		this->x /= vector_length;
+		this->y /= vector_length;
+	}
+}
+
 inline double Vector2D::Dot(const Vector2D &v2)const
 {
 	return x*v2.x + y*v2.y;
@@ -132,5 +143,20 @@ inline int Vector2D::Sign(const Vector2D& v2)const
 	else 
 	{
 		return clockwise;
+	}
+}
+
+inline Vector2D Vector2D::Perp()const
+{
+	return Vector2D(-y, x);
+}
+
+inline void Vector2D::Truncate(double max)
+{
+	if(this->Length() > max)
+	{
+		this->Normalize();
+
+		*this *= max;
 	}
 }
